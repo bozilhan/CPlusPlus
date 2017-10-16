@@ -1,0 +1,36 @@
+main.txt
+ Created on: Nov 11, 2016
+     Author: bozilhan
+	std::cout << "Enter - Main" << std::endl;
+
+	//cannot instantiate abstract class
+	//INT::Animal animal;
+	//INT::Canine canine;
+	///std::shared_ptr<INT::Animal> pAnimal = std::shared_ptr<INT::Canine>( new INT::Canine() );
+	//std::shared_ptr<INT::Canine> pCanine = std::shared_ptr<INT::Canine>( new INT::Canine() );
+
+	INT::Dog dog;
+	std::cout << "" << std::endl;
+	
+	std::shared_ptr<INT::Animal> pAnimalDog = std::shared_ptr<INT::Animal>( new INT::Dog() );
+	std::cout << "" << std::endl;
+
+	std::shared_ptr<INT::Feline> pFelineLion = std::shared_ptr<INT::Feline>( new INT::Lion() );
+	std::cout << "" << std::endl;
+
+	INT::Tiger tiger;
+	std::cout << "" << std::endl;
+
+	tiger.sleep();
+	tiger.roam();
+
+	tiger.eat();
+
+
+	std::cout << "Exit - Main" << std::endl;
+	#include "Interface/Animal.h"
+#include "Interface/Canine.h"
+#include "Interface/Feline.h"
+#include "Interface/Dog.h"
+#include "Interface/Tiger.h"
+#include "Interface/Lion.h"

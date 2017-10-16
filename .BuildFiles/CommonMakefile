@@ -1,0 +1,45 @@
+ifeq ($(RELEASE),1)
+CMAKE_BUILD_TYPE = Release
+else
+CMAKE_BUILD_TYPE = Debug 
+endif
+
+ifeq ($(VERBOSE),1)
+CMAKE_VERBOSE_MAKEFILE = ON
+else
+CMAKE_VERBOSE_MAKEFILE = OFF
+endif
+
+MAKEX = make -j 3
+
+ifeq ($(COVERAGE),1)
+COVERAGE_PRM="-DENABLE_COVERAGE:BOOL=ON"
+else
+COVERAGE_PRM="-DENABLE_COVERAGE:BOOL=OFF"
+endif
+
+cmake:
+	-mkdir build
+	cd build; cmake -Wno-dev --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=$(CMAKE_BUILD_TYPE) -DCMAKE_VERBOSE_MAKEFILE:BOOL=$(CMAKE_VERBOSE_MAKEFILE) $(COVERAGE_PRM) ..;
+
+all:
+	cd build ; $(MAKEX) all;
+
+clean:
+	if test -d build; then cd build ; $(MAKEX) clean; fi	
+
+install:
+	cd build ; $(MAKEX) install;
+
+uninstall:
+	cd build ; $(MAKEX) uninstall;
+
+rebuild: 
+	clean all
+
+full_clean: clean
+	-rm -rf build
+
+full_build: cmake all
+
+full_rebuild: full_clean full_build

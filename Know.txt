@@ -1,0 +1,634 @@
+svn --username bozilhan ci -m ''
+======================================================================================================================================================================================================================
+Lokalde 3 node calistirmak icin 
+SNC.ini
+[PI1]
+CommunicationInterface=TCP
+HostName 	= localhost 
+olarak degistir
+
+TCPServer.exe calistir.
+
+3 tane SNC.sln ac Solution Explorer'dan SNC sec --> Alt+Enter --> Debugging Command Arguments alanina her acilan SNC.sln icin asagidaki satirlari kopyala
+0 SNMU
+1 NMU
+2 MU
+======================================================================================================================================================================================================================
+Gateway BC7 ye gecme
+C:\GATEWAYData\GatewayTestData\snc.xml i update et 
+
+C:\DLPPL\L22\App\GATEWAY\Gateway2.3.0.8\lib\link-message-snc-2.3.0.12.jar i 7zip le sag tik open archive 
+
+yeni snc.xml i C:\DLPPL\L22\App\GATEWAY\Gateway2.3.0.8\lib\link-message-snc-2.3.0.12.jar\com\milsoft\simpl\common\link\message\snc\ altina kopyala
+
+BC6 ya gecmek icin 
+mevcut link-message-snc-2.3.0.12.jar i _BC7link-message-snc-2.3.0.12.jar olarak rename et
+C:\DLPPL\L22\App\GATEWAY\Gateway2.3.0.8\lib\_BC6link-message-snc-2.3.0.12.jar link-message-snc-2.3.0.12.jar olarak rename et
+======================================================================================================================================================================================================================
+Emane
+once eclipse de attach to process de daha sonra gateway baglantisi
+
+
+Gatewayle 42. senaryo arasinda baglanti kurulmadiysa
+42. senaryonun demo-startina su satiri ekle
+#!/bin/bash -
+/home/developer/delLog.sh
+../my_scripts/democtl-host-single start "$@" 42 4 
+#brctl addif emanenode0 eno50332192 
+-------> brctl addif emanenode0 eno33554968  // Bu satir. eno degisebilir.
+SdtClientFromEmane 10.99.0.101
+
+42. senaryo icin baglanti durumunu kontrol etmek icin centos'da ./demo-start calisirken 
+ping 10.99.0.101
+ping 10.99.0.1
+ping 10.99.0.2
+ping 10.99.0.3
+
+windows'da 
+ping 10.99.0.1
+ping 10.99.0.2
+ping 10.99.0.3
+windows'da kayip olsa da ping sonucu donmeli
+======================================================================================================================================================================================================================
+Sonar calistirma
+src ye git
+sonar-project.properties edit et ve src altina kopyala
+build-wrapper-linux-x86-64 --out-dir bw-outputs make full_rebuild && sonar-scanner
+build-wrapper-linux-x86-64 --out-dir bw-outputs make -f Makefile64 && sonar-scanner
+
+Derleme bittikten sonra
+src seviyesinde sonar-scanner
+======================================================================================================================================================================================================================
+Author:
+[~bozilhan]
+
+Reviewers:
+[~ocolak]
+[~tkurtulus]
+[~aaydin]
+[~dyuksel]
+[~lmisirlioglu]
+[~yaras]
+
+Approver:
+[~lmisirlioglu]
+======================================================================================================================================================================================================================
+svn commit --username bozilhan --message "New development DTDMA Change" 
+======================================================================================================================================================================================================================
+#include <cstdint> --> uint8_t
+#include <cstddef> --> size_t
+======================================================================================================================================================================================================================
+std::array<std::array<int8_t,8>,9> m_TDW;
+int8_t m_TDW[8][9];
+======================================================================================================================================================================================================================
+TAG
+
+1. 	http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases git 
+	Son versiyona bak
+	
+2.  Windows+R
+	C:\workspace\Mantdl\Marlin\src\MarlinCommon\MarlinDefs.h
+	static const std::string MARLIN_VERSION = "0.0.5";
+	
+	C:\workspace\Mantdl\NC\SNC.ini 
+	NC_VERSION
+	degistir. 
+	
+	COMMITLEMEYI UNUTMA!!!
+
+3. 	2. adimi gerceklestirdikten sonra 
+	http://svn.milsoft.com.tr/mantdl/trunk/mantdl_Working/code/Marlin
+	http://svn.milsoft.com.tr/mantdl/trunk/mantdl_Working/code/NC
+	git agac yapisindan Marlin i ya da NC yi sec ve copy to de
+	http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.{YENI_VERSIYON}
+	http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/SNC_0.0.{YENI_VERSIYON}
+	olarak kopyala
+
+4. 	Daha sonra yeni eklenen klasore 0.0.{YENI_VERSIYON} --> Sag Tik --> Show Properties 
+	Mevcut .BuildFiles URL sini
+	../../../../trunk/mantdl_Working/.BuildFiles
+	ile degistir
+
+5. 	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-With-Web-Tag/configure
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-Tag/configure
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Windows-Tag/configure
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Windows-With-Web-Tag/configure
+	http://10.0.0.134:8080/view/Tag/job/SNC-Windows-Tag/configure
+	http://10.0.0.134:8080/view/Tag/job/SNC-Centos-Tag/configure
+
+	e git 
+	String Parameter TAG_VERSION parametresinin default degerini 0.0.{YENI_VERSIYON} yap Apply --> Save
+	ve "Build with Parameters" tikla	
+
+	Ya da
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-With-Web-Tag/
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-Tag/
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Windows-Tag/
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Windows-With-Web-Tag/
+	http://10.0.0.134:8080/view/Tag/job/SNC-Centos-Tag/
+	http://10.0.0.134:8080/view/Tag/job/SNC-Windows-Tag/
+
+	e git
+	ve "Build with Parameters" tikla guncel versiyonu gir ve build butonuna bas
+
+6. 	Ilgili is sonucu cikan zipi ICINI SON KEZ KONTROL EDEREK
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-Tag/ws/bin/
+	http://10.0.0.134:8080/view/Tag/job/Marlin-Centos-With-Web-Tag/label=Centos/ws/bin/
+	
+	http://10.0.0.134:8080/view/Tag/job/SNC-Centos-Tag/label=Centos/ws/bin/
+	http://10.0.0.134:8080/view/Tag/job/SNC-Windows-Tag/label=Windows/ws/bin/
+	
+	den 
+	http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.{YENI_VERSIYON}/bin
+	http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/SNC_0.0.{YENI_VERSIYON}/bin
+	altina eklemeyip commitlemeyi unutma
+
+7.  Asagidaki mailleri gonder
+	
+To:	Levent Misirlioglu <lmisirlioglu@milsoft.com.tr>; Devrim Yuksel <dyuksel@milsoft.com.tr>; Ozgecan Oralli <ooralli@milsoft.com.tr>; Deniz Ustunay <dkaya@milsoft.com.tr>
+Cc:	Ahmet Aydin <aaydin@milsoft.com.tr>; Taner Kurtulus <tkurtulus@milsoft.com.tr>; Sahika Akdogan <sakdogan@milsoft.com.tr>; Serkan Bozkurt <sbozkurt@milsoft.com.tr>
+Subject : Marlin Tag 0.0.14
+
+Merhaba, 
+
+Guncel Marlin taglerine
+
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.20/bin/MarlinCentos_0.0.20_SVN4881.zip
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.20/bin/MarlinCentosWithWeb_0.0.20_SVN4881.zip
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.20/bin/MarlinVC11_0.0.20_SVN4881.zip
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/Marlin_0.0.20/bin/MarlinVC11WithWeb_0.0.20_SVN4881.zip
+
+linklerinden erisebilirsiniz.
+
+Saygýlarýmla.
+Baran Ersin ÖZÝLHAN
+3187
+**************************************************************************************************************************************************************************************************************************
+**************************************************************************************************************************************************************************************************************************
+**************************************************************************************************************************************************************************************************************************
+**************************************************************************************************************************************************************************************************************************
+To:	Levent Misirlioglu <lmisirlioglu@milsoft.com.tr>; Tuna Kirca <tkirca@milsoft.com.tr>; Ali Gorkem Sarkis <gsarkis@milsoft.com.tr>; Yesim Aras <yaras@milsoft.com.tr>; Merve Duman <mduman@milsoft.com.tr>
+Cc:	Ahmet Aydin <aaydin@milsoft.com.tr>; Orcun Colak <ocolak@milsoft.com.tr>; Taner Kurtulus <tkurtulus@milsoft.com.tr>; Alican Akcasoy <aakcasoy@milsoft.com.tr>; Burak Gokmen <bgokmen@milsoft.com.tr>; Murat Demirsoy <mdemirsoy@milsoft.com.tr>; Serkan Bozkurt <sbozkurt@milsoft.com.tr>; Dilek Dogru <ddogru@milsoft.com.tr>
+Subject : SNC Tag 0.0.{YENI_VERSIYON}
+	
+Merhaba, 
+
+Guncel SNC tagine
+
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/SNC_0.0.7/bin/SNCCentos_0.0.7_SVN4680.zip
+http://svn.milsoft.com.tr/mantdl/tags/engCM/endOfReleases/SNC_0.0.7/bin/SNCVC11_0.0.7_SVN4680.zip
+
+linklerinden erisebilirsiniz.
+
+Saygýlarýmla.
+Baran Ersin ÖZÝLHAN
+3187
+======================================================================================================================================================================================================================
+hostnamectl set-hostname tcs01
+======================================================================================================================================================================================================================
+CRLF --> \r\n
+======================================================================================================================================================================================================================
+gdb {EXE_ISMI} -c {CORE}
+.
+.
+.
+komut satiri ciktiginda where ve enter
+.
+.
+cikmak icin quit yaz enter
+======================================================================================================================================================================================================================
+gdb {EXE_ISMI} {CORE} -ex ‘thread apply all bt’
+
+
+Tüm thread’in callstack’ini bana göster anlamýna geliyor. 
+
+======================================================================================================================================================================================================================
+http://10.0.0.134:8080/view/Source/job/Marlin-Centos-With-Web/label=Centos/ws/bin/
+======================================================================================================================================================================================================================
+exeCopy.sh 
+#!/bin/bash
+scp Marlin root@10.0.1.2:/home/developer/BaranPIDenemeler/${1}
+
+cpToThisDesktop.sh 
+#!/bin/bash
+cp -r ${1} /home/developer/Desktop/.
+
+scpFromTCS1.sh 
+#!/bin/bash
+scp developer@10.0.1.1:/home/developer/workspace/bozilhan/Mantdl/${1} .
+
+scpToTCS1.sh 
+#!/bin/bash
+scp ${1} root@10.0.1.1:/home/developer/workspace/bozilhan/Mantdl/.
+
+export BOOST_ROOT=/home/developer/Desktop/boost_1_59_0
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+ulimit -c unlimited
+
+export PS1="[\u@\h:\w]"
+
+alias mr='make full_rebuild'
+alias mb='make full_build'
+alias ma='make all'
+alias ll='ls -alrt'
+alias t1='ssh -X -t root@10.0.1.1 "cd /home/developer/workspace/bozilhan/Mantdl && bash"'
+alias bp='cd /home/developer/BaranPIDenemeler'
+alias mt='cd /home/developer/MarlinTransfer'
+======================================================================================================================================================================================================================
+LOG_TRACE(PI_COMP) << "SyncSerial::openSSC"
+	<< ( success ? " is successful": " is not successful" );
+======================================================================================================================================================================================================================
+rpm -Uvh lcov-1.11-1.src.rpm
+======================================================================================================================================================================================================================
+rpm2cpio lcov-1.11-1.src.rpm | cpio -idmv
+gtar -xf lcov-1.11.tar.gz
+cd lcov-1.11
+make install
+======================================================================================================================================================================================================================
+10.0.0.232
+user : root
+Paswd: Ka9786!
+
+User: intranet\mantdlbuild mantdlbuild
+Pasw: Kt*178b0zz
+======================================================================================================================================================================================================================
+set path=C:\Program Files (x86)\MSBuild\14.0\Bin;%path%
+set path=%path%;C:\Windows\Microsoft.NET\Framework\v4.0.30319\;C:\Windows\Microsoft.NET\Framework\v3.5\
+======================================================================================================================================================================================================================
+Elle CLOC
+./MySLOCCount.sh DesiredVersion
+
+#!/usr/bin/bash
+#$1: DesiredVersion
+
+rm -rf SLOC*
+
+FOLDER=SLOC$1
+DESTINATION=/home/developer/$FOLDER"/"
+
+svn checkout -r $1 http://svn.milsoft.com.tr/mantdl/trunk/mantdl_Working/code/Marlin/src $FOLDER
+svn checkout http://svn.milsoft.com.tr/mantdl/trunk/mantdl_Working/code/Marlin/src 
+svn checkout http://svn.milsoft.com.tr/mantdl/trunk/mantdl_Working/code/Marlin
+svn checkout http://10.0.0.59/mantdl/trunk/mantdl_Working/code/Marlin
+
+cd /opt/cloc-1.64/
+
+./cloc $DESTINATION
+
+rm -rf $DESTINATION
+
+======================================================================================================================================================================================================================
+To create zip file,enter
+zip filename.zip input1.txt input1.jpg
+
+to include the contents of a directory in a zip archieve, enter
+zip -r backup.zip /data
+zip -r backup.zip data/
+
+Decompress
+unzip filename
+unzip filename.zip
+======================================================================================================================================================================================================================
+#include <chrono>
+std::chrono::milliseconds m_NeighborListTimeStamp;
+======================================================================================================================================================================================================================
+std::set<uint8_t>::iterator it = m_MPRS.find( rcn.getNeighborID() );
+if ( m_MPRS.end() != it )
+{
+	m_MPRS.erase( it );
+}
+======================================================================================================================================================================================================================
+RCNeighborList& rcnl = rct.getRCNodeList().at( m_OwnID ).getNeighborList();
+// lambda expression
+// Find the RCNeighbor element whose NeighborID equals to originatorID
+RCNeighborList::iterator it = std::find_if( rcnl.begin(), rcnl.end(),
+	[originatorID]( const RCNeighbor& n )
+	{
+		return originatorID == n.getNeighborID();
+	} );
+======================================================================================================================================================================================================================
+bool operator==( const RC::RCNeighbor& n1, const uint8_t& neighborID );
+bool RC::operator==( const RC::RCNeighbor& n1, const uint8_t& neighborID )
+{
+	return ( n1.getNeighborID() == neighborID );
+}
+======================================================================================================================================================================================================================
+bool areApproximatelyEqual( const double& a, const double& b );
+bool RCTopology::areApproximatelyEqual( const double& a, const double& b )
+{
+	LOG_TRACE( RC_COMP ) << "Begin RCTopology::areApproximatelyEqual";
+
+	bool bResult = false;
+
+	double dAbsolute( 1e-12 );
+	
+	double dRelative( 1e-8 );
+
+	double dDiff = std::fabs( a - b );
+
+	if (  dDiff <= dAbsolute )
+	{
+		bResult = true;
+	}
+
+	if ( !bResult )
+	{
+		double dTemp = ( std::fabs( a ) < std::fabs( b ) ? std::fabs( b ) : std::fabs( a ) ) * dRelative;
+
+		bResult = ( dDiff <= dTemp );
+	}
+	
+	LOG_TRACE( RC_COMP ) << "RCTopology::areApproximatelyEqual - " 
+		<< a << " and " << b << ( bResult ? " are approximately equal": " are not approximately equal" );
+
+	LOG_TRACE( RC_COMP ) << "End RCTopology::areApproximatelyEqual";
+
+	return bResult;
+}
+======================================================================================================================================================================================================================
+boost::log::formatting_ostream& operator<<( boost::log::formatting_ostream& os, const   MAC::SOTStatus& ss );
+boost::log::formatting_ostream& operator<<( boost::log::formatting_ostream& os, const MAC::SOTStatus& ss )
+{
+	switch ( ss )
+	{
+		case MAC::SOTStatus::NOT_REQUESTED :
+			os << "NOT_REQUESTED(0)";
+			break;
+
+		case MAC::SOTStatus::OWNED :
+			os << "OWNED(1)";
+			break;
+
+		case MAC::SOTStatus::ORDINARY_REQUEST :
+			os << "ORDINARY_REQUEST(2)";
+			break;
+
+		case MAC::SOTStatus::PRIORITY_REQUEST :
+			os << "PRIORITY_REQUEST(3)";
+			break;
+
+		default :
+			os << "NOT_REQUESTED(0)";
+			break;
+	}
+
+	return os;
+}
+======================================================================================================================================================================================================================
+std::string SyncSerial::convertLastErrorToString()
+{
+	std::string strResult = "";
+
+	DWORD error = GetLastError();
+
+	if ( error )
+	{
+		LPVOID lpMsgBuf;
+
+		DWORD bufLen = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr, error, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
+			(LPTSTR) &lpMsgBuf, 0, nullptr );
+
+		if ( bufLen )
+		{
+			LPCTSTR lpMsgStr = (LPCTSTR) lpMsgBuf;
+
+			strResult = std::string( lpMsgStr, lpMsgStr + bufLen );
+		}
+	}
+
+	return strResult;
+}
+======================================================================================================================================================================================================================
+#include <boost/thread/shared_mutex.hpp>
+boost::shared_mutex m_Mutex;
+//Shared lock
+boost::shared_lock < boost::shared_mutex > sharedReadLock( m_Mutex );
+	
+//Exclusive lock
+boost::unique_lock < boost::shared_mutex > exclusiveWriteLock( m_Mutex );
+======================================================================================================================================================================================================================
+netsh interface ipv4 show interface
+Windowsda Marlin.ini --> InterfaceName = Ethernet bulma
+======================================================================================================================================================================================================================
+Jenkinsde yeni windows node eklenecekse Jenkins-->ManageJenkins-->ManageNodes-->{YENI_EKLENEN_NODE}-->Configure
+Vbs ile makinenin kendisinde calistirdigimiz evrironment path degiskenini oldugu gibi bu path degiskenine kopyala
+
+/etc/rc.d/init.d/jenkins restart
+======================================================================================================================================================================================================================
+#include "Util/Logger/LogDef.h"
+LOG_TRACE(PI_COMP) << "Begin RCMediator::initialize";
+LOG_TRACE(PI_COMP) << "End RCMediator::initialize";
+LOG_DEBUG(RC_COMP) << "RCTopology::updateNeighList - RCNode[" << srcNodeId << "]: " << m_RCNodeList.at( srcNodeId );
+======================================================================================================================================================================================================================
+#include <cstdint> --> uint8_t
+#include <cstddef> --> size_t
+======================================================================================================================================================================================================================
+b2 -q -j8 --toolset=msvc-14.0 address-model=64 --build-type=complete stage
+b2 toolset=msvc-14.0 address-model=64 link=shared threading=multi runtime-link=shared architecture=x64 --build-type=complete stage
+b2 toolset=msvc-14.0 address-model=64 --build-type=complete --with-iostreams -s BZIP2_SOURCE=D:\opt\bzip2-1.0.6 -s ZLIB_SOURCE=D:\opt\zlib-1.2.8 stage
+======================================================================================================================================================================================================================
+ValueName: Autorun
+Value: "%AppData%\aliases.cmd"
+======================================================================================================================================================================================================================
+cmd 
+shutdown /r /t 0
+/r --> restart
+/s --> shutdown
+/t --> timer X ms sonra expire ediyor
+======================================================================================================================================================================================================================
+./b2
+./b2 --with-iostreams -s BZIP2_SOURCE=/opt/bzip2 -s ZLIB_SOURCE=/opt/zlib
+
+./bootstrap.sh --exec-prefix=/opt/boost -libdir=/opt/boost/lib -includedir=/opt/boost/include
+bootstrap.bat --exec-prefix=D:\opt\boost --libdir=D:\opt\boost\lib --includedir=D:\opt\boost\include
+======================================================================================================================================================================================================================
+dir /s /b >zprint.txt
+dir /s /b | findstr "\.h$" >zprint.txt
+D:/workspace/Mantdl/Win/Marlin/src/ICD/LLC_MAC
+======================================================================================================================================================================================================================
+rpm -qa | egrep "xauth|xorg-11-apps"
+rpm -qa | egrep "openssh"
+======================================================================================================================================================================================================================
+vim gizli karakter gosterme komutu yaz enter yaz enter
+:set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+:set list
+======================================================================================================================================================================================================================
+DOS variable basma
+echo %DEPLOYMENT_DIR%
+======================================================================================================================================================================================================================
+find . -name '*s'
+find . -name build | xargs rm -rf 
+find . -name '*.cpp' | wc -l
+find . -name '*.h' | wc -l
+\
+ln -s /home/developer/SetupFiles/perl5 /usr/bin/baran
+
+ln -s /home/developer/MarlinTransfer/scpToTCS1.sh /usr/local/bin/scpToTCS1
+chmod 
+read 4
+write 2
+execute 1
+======================================================================================================================================================================================================================
+%s/^M//g
+^ --> CTRL+V
+M --> CTRL+M
+======================================================================================================================================================================================================================
+echo "Target $4: "$4 >> $FILE
+echo "Copy.sh entry"
+======================================================================================================================================================================================================================
+ssh -t operator@siu_multilink_dlps "cd /opt/genesis_infra/GDLS-MaintenanceTool/bin/ && pwd && ls -alrt"
+ssh ile ilgili makinada konut calistirma
+======================================================================================================================================================================================================================
+/export/home a gidilir.
+du -sh * yazilir ve kullanici adina karsilik kullanim miktari listelenir.
+
+df -h da toplam disk kullanimini listeler.
+======================================================================================================================================================================================================================
+DOSYA ICINDEKILERI DOS'DA TEXT YAZMA
+dir /b/s > aaa.txt
+======================================================================================================================================================================================================================
+Solutionda Warningleri kapama
+NETMGTs ( Main.cpp olmayan ) Properties --> C/C++ disable specific warnings
+Oraya ekliyoruz
+======================================================================================================================================================================================================================
+Lokalde mlk derlerken bu satirlari comment out et
+FAKAT COMMIT Oncesi comment kaldir ve derle. Daha sonra commit et !!!!
+
+#INSTALL(DIRECTORY ${MLK_MAIN}/MLK DESTINATION include
+#		FILES_MATCHING PATTERN ".svn" EXCLUDE
+#		               PATTERN "*.h" )
+======================================================================================================================================================================================================================
+/DLPS/Software Products/SRS_forC2Platforms/CSC-SRS
+gereksinimler bu path civarinda
+EA
+DLPS C2-->Logical View-->CSCI DLPS-->CSC NETMAN-->L22NETMAN
+Specs
+/DLPS/Software Products/Implementation
+======================================================================================================================================================================================================================
+
+======================================================================================================================================================================================================================
+Birden fazla .jar calistirmak icin 
+java -cp "fileman.jar:pirimap_core.jar" dene.Dene
+fileman.jar --> Bizim yaptigimiz jar
+pirimap_core.jar --> Pirimap core jar
+
+dene --> Bizim sinifin packagei 
+Dene --> Bizim sinif
+======================================================================================================================================================================================================================
+C2'DAYKEN DLPS'DEN SCP ILE DOSYA KOPYALAMA
+scp operator@siu_multilink_dlps:/opt/genesis_infra/GDLS-Netmgt-16/bin/NETMGT_GKM_01 .
+
+C2 HOME UNDAKI BIR DOSYAYI TRANSFERE KOPYALAMA
+scp operator@202.0.1.245:DIMReception.zip .
+======================================================================================================================================================================================================================
+ASAGIDA PAKETLENEN LOGLAR BURADA!!!!!
+/opt/genesis_infra/gdls/LOGS/siu_multilink_dlps/20120706/GDLS-Netmgt-16
+======================================================================================================================================================================================================================
+
+======================================================================================================================================================================================================================
+
+======================================================================================================================================================================================================================
+EXCEL'E COMBO EKLERKEN DATA VALIDATION SECECEGIZ ORADAN YAPACAGIZ
+======================================================================================================================================================================================================================
+WINDOWS EXPLORER
+/n,/e,(/select),<New Path>
+======================================================================================================================================================================================================================
+
+======================================================================================================================================================================================================================
+Image ve INDE buralarda
+ssh operator@202.0.1.11
+cd /opt/genesis_infra/gdls/release/ImageTransfer/
+======================================================================================================================================================================================================================
+
+======================================================================================================================================================================================================================
+SOL LABDAN VERI ALMA
+Sol lab ( siu_multilink_)dlps: 202.0.1.249 )
+Buranin DLiteindan veri almak icin Windows explorer ile 
+ftp://210.0.1.102 user: maintain pass: maintain (operator/operator) ilgili dosya buraya konur.
+Daha sonra kolsolda terminal acilir. 
+ssh girilenSifre@201.0.1.102 
+sonra da 10.0.0.165 transfer makinesinin diger bacagi olan 202.0.1.233 e atilir.
+Kendi makinemizden de 10.0.0.165 uzerinden lokale cekilir.
+DECIMAL TO BINARY
+void DecimalToHexadecimalNumber( unsigned short nDecimalNumber )
+{
+	static char chBinaryString[ 17 ];
+
+	chBinaryString[ 16 ] = '\0';
+
+	for ( long i = 0; i < 16; i++ )
+	{
+		chBinaryString[ 15 - i ] = nDecimalNumber & 1 ? '1' : '0';
+		nDecimalNumber = nDecimalNumber >> 1;
+	}
+
+	return chBinaryString;
+}
+======================================================================================================================================================================================================================
+	static void splitIntoByte( uint16_t value, uint8_t& lsb, uint8_t& msb );
+
+	static uint8_t generateByte( uint8_t utcFlag, uint8_t sequenceNumber, uint8_t cycleNumber );
+	
+	
+void PDUUtility::splitIntoByte( uint16_t value, uint8_t& lsb, uint8_t& msb )
+{
+	LOG_DEBUG(MAC_COMP) <<  "Begin PDUUtility::splitIntoByte";
+
+	lsb = value & 0xFF;
+
+	msb = value >> 8;
+	
+	LOG_DEBUG(MAC_COMP) <<  "End PDUUtility::splitIntoByte";
+}
+
+uint8_t PDUUtility::generateByte( uint8_t utcFlag, uint8_t sequenceNumber, uint8_t cycleNumber )
+{
+	LOG_DEBUG(MAC_COMP) <<  "Begin PDUUtility::generateByte";
+
+	uint8_t nReturn = ( ( utcFlag << 7 ) | ( sequenceNumber << 4 ) | ( cycleNumber & 0xF ) );
+
+	LOG_DEBUG(MAC_COMP) <<  "End PDUUtility::generateByte";
+
+	return nReturn;
+}
+======================================================================================================================================================================================================================
+void STUComposition::printSTUBuffer( const std::vector<uint8_t>& stuBuffer ) const
+{
+	LOG_TRACE(MAC_COMP) << "Begin STUComposition::printSTUBuffer";
+
+	const size_t stuBufferSizeInBytes = stuBuffer.size();
+
+	LOG_TRACE( MAC_COMP ) << "STUComposition::printSTUBuffer - serialized STUBuffer["
+		<< stuBufferSizeInBytes << "]= { ";
+
+	for ( auto& v : stuBuffer )
+	{
+		LOG_TRACE(MAC_COMP) << std::hex << v << std::dec << " ";
+	}
+
+	LOG_TRACE(MAC_COMP) << "}";
+
+	LOG_TRACE(MAC_COMP) << "End STUComposition::printSTUBuffer";
+}
+======================================================================================================================================================================================================================
+D:\JetBrains\configs\.IntelliJIdea2016.11\config
+======================================================================================================================================================================================================================
+Nexus Sifremiz
+User: MANTDL
+Pass: mantdl_123456
+ProcessFramework Rev:0.16.9    http://nexus:8081/nexus/content/repositories/CEPL_Releases/com/milsoft/cpp/framework/ProcessFramework/0.16.9/
+DDS Rev:2.16.4   http://nexus:8081/nexus/content/repositories/CEPL_Releases/com/milsoft/cpp/dds/DDS/2.16.4/
+DDSModeler Rev: 5.4.27   http://nexus:8081/nexus/content/repositories/CEPL_Releases/com/milsoft/cepl/DDSModeler/5.4.27/
+DDSSpy Rev: 2.18.9  http://nexus:8081/nexus/content/repositories/CEPL_Releases/com/milsoft/cepl/dds/DDSSpy/2.8.19/
+DDSMonitor Rev: 0.1.2   http://nexus:8081/nexus/content/repositories/CEPL_Releases/com/milsoft/cpp/dds/DDSMonitor/0.1.2/
+======================================================================================================================================================================================================================
+::make format
+::cd C:\PsTools
+::call aaa.bat
+::runas /savecred /profile /user:mantdlbuild /password:Kt*178b0zz aaa.bat
+::make BUILD_TYPE=full_rebuild SOL_TYPE=Debug ARC_TYPE=64 VS_TYPE=VS2015
+::make BUILD_TYPE=full_build SOL_TYPE=Debug ARC_TYPE=64 VS_TYPE=VS2012
+::make format
+::C:\PsTools\psexec.exe -u intranet\mantdlbuild -p Kt*178b0zz "C:\jenkinsWorkspace\workspace\Marlin-Windows\label\WindowsVC14\src\aaa.bat"
+::psexec \\computername -u domain\user -p password "C:\Program Files\Internet Explorer\iexplore.exe" http:\\223.100.200.78
